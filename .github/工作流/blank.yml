@@ -1,0 +1,66 @@
+姓名： build_ErfanGSIs
+
+开：
+# 发布：
+# 类型： [已发布]
+# 推送：
+# 分支：
+# - 主控
+# 路径：
+# - “.config”
+# 调度：
+# - cron： 0 8 * * 5
+  观看：
+    类型：[已开始]
+    
+环境：
+  ROM_URL：https://dl3.smartisan.com/ota/mol.darwin-ard11-rom-8.5.0-SEKSA.darwin-user/202207181841/8.5.3-202207181710-user-drw-afb56dfbfc.zip
+  ROM_NAME：通用像素
+  BUILD_TYPE：仅
+  台湾：亚洲/上海
+
+工作：
+  构建：
+    运行时间：Ubuntu-18.04
+    如果：github.event.repository.owner.id == github.event.sender.id
+
+    步骤：
+       - 名称： 结帐
+         用途：操作/checkout@master
+           
+       - 名称：初始化环境
+         运行： |
+sudo -E apt-get -qq install git wget
+       
+       - 名称：克隆尔凡GSI源代码
+         run： git clone --recurse-submodules https://github.com/erfanoabdi/ErfanGSIs.git ErfanGSIs
+         
+       - 名称：修复退出
+         运行： |
+sed -i 's/\|\|exit 1//g' $GITHUB_WORKSPACE/ErfanGSIs/url2GSI.sh
+sed -i 's/exit 1//g' $GITHUB_WORKSPACE/ErfanGSIs/url2GSI.sh
+       
+       - 名称：设置二凡GSI要求
+         运行： |
+cd $GITHUB_WORKSPACE/ErfanGSIs
+MKDIR ./输出
+须藤狂欢 ./setup.sh
+       
+       - 名称： 下载库存 ROM 和生成 GSI
+         运行： |
+cd $GITHUB_WORKSPACE/ErfanGSIs
+sudo bash ./url2GSI.sh -c --$BUILD_TYPE $ROM_URL $ROM_NAME
+       
+       - 名称： 拉链 GSI 
+         运行： |
+cd $GITHUB_WORKSPACE/ErfanGSIs/output
+姆克迪尔决赛
+zip -r final/GSI.zip ./*
+       
+       - 名称： 上传GSI到微转
+         运行： |
+cd $GITHUB_WORKSPACE/ErfanGSIs/output
+卷曲 -sL https://git.io/file-transfer |.sh
+./transfer gof ./final/GSI.zip
+         
+            
